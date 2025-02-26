@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChessinatorMVC", "ChessinatorMVC", "{44D5DF55-E890-4374-8BD7-177C8E801117}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessinatorDomain", "ChessinatorMVC.ChessinatorDomain\ChessinatorDomain.csproj", "{3BF85538-E044-45DD-A77D-83BC21A87D49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessinatorInfrastructure", "ChessinatorInfrastructure\ChessinatorInfrastructure.csproj", "{38F2C78C-CEC7-41DB-9DB1-F0CE988E1F93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BF85538-E044-45DD-A77D-83BC21A87D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF85538-E044-45DD-A77D-83BC21A87D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF85538-E044-45DD-A77D-83BC21A87D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF85538-E044-45DD-A77D-83BC21A87D49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38F2C78C-CEC7-41DB-9DB1-F0CE988E1F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38F2C78C-CEC7-41DB-9DB1-F0CE988E1F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38F2C78C-CEC7-41DB-9DB1-F0CE988E1F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38F2C78C-CEC7-41DB-9DB1-F0CE988E1F93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
