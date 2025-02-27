@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace ChessinatorDomain.Model;
 
-public partial class PlayerTournament:Entity
+public partial class PlayerTournament
 {
+    public int Id { get; set; }
+
     public int PlayerId { get; set; }
 
     public int TournamentId { get; set; }

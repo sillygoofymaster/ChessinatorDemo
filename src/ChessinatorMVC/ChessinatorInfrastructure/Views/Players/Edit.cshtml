@@ -12,16 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CurrentElo" class="control-label"></label>
-                <input asp-for="CurrentElo" class="form-control" />
-                <span asp-validation-for="CurrentElo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PeakElo" class="control-label"></label>
-                <input asp-for="PeakElo" class="form-control" />
-                <span asp-validation-for="PeakElo" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -33,19 +24,18 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="TitleId" class="control-label"></label>
+                <select asp-for="TitleId" class="form-control" asp-items="ViewBag.TitleId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Winrate" class="control-label"></label>
-                <input asp-for="Winrate" class="form-control" />
-                <span asp-validation-for="Winrate" class="text-danger"></span>
+                <label asp-for="CurrentElo" class="control-label"></label>
+                <input asp-for="CurrentElo" class="form-control" />
+                <span asp-validation-for="CurrentElo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TotalGamesCount" class="control-label"></label>
-                <input asp-for="TotalGamesCount" class="form-control" />
-                <span asp-validation-for="TotalGamesCount" class="text-danger"></span>
+                <label asp-for="PeakElo" class="control-label"></label>
+                <input asp-for="PeakElo" class="form-control" />
+                <span asp-validation-for="PeakElo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Birthday" class="control-label"></label>
@@ -57,7 +47,21 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Wins" class="control-label"></label>
+                <input asp-for="Wins" class="form-control" />
+                <span asp-validation-for="Wins" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Draws" class="control-label"></label>
+                <input asp-for="Draws" class="form-control" />
+                <span asp-validation-for="Draws" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Loses" class="control-label"></label>
+                <input asp-for="Loses" class="form-control" />
+                <span asp-validation-for="Loses" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

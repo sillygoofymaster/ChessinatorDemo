@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace ChessinatorDomain.Model;
 
-public partial class Tournament: Entity
+public partial class Tournament
 {
+    public int Id { get; set; }
 
     public string Type { get; set; } = null!;
 

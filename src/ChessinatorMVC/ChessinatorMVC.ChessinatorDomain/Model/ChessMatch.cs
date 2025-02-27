@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace ChessinatorDomain.Model;
 
-public partial class ChessMatch:Entity
+public partial class ChessMatch
 {
+    public int Id { get; set; }
 
     public int WhitePlayerId { get; set; }
 

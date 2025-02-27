@@ -9,23 +9,22 @@ using ChessinatorDomain.Model;
 
 namespace ChessinatorInfrastructure.Controllers
 {
-    public class PlayersController : Controller
+    public class VenuesController : Controller
     {
         private readonly ChessdbContext _context;
 
-        public PlayersController(ChessdbContext context)
+        public VenuesController(ChessdbContext context)
         {
             _context = context;
         }
 
-        // GET: Players
+        // GET: Venues
         public async Task<IActionResult> Index()
         {
-            var chessdbContext = _context.Players.Include(p => p.Title);
-            return View(await chessdbContext.ToListAsync());
+            return View(await _context.Venues.ToListAsync());
         }
 
-        // GET: Players/Details/5
+        // GET: Venues/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +32,39 @@ namespace ChessinatorInfrastructure.Controllers
                 return NotFound();
             }
 
-            var player = await _context.Players
-                .Include(p => p.Title)
+            var venue = await _context.Venues
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (player == null)
+            if (venue == null)
             {
                 return NotFound();
             }
 
-            return View(player);
+            return View(venue);
         }
 
-        // GET: Players/Create
+        // GET: Venues/Create
         public IActionResult Create()
         {
-            ViewData["TitleId"] = new SelectList(_context.Titles, "Id", "ShortName");
             return View();
         }
 
-        // POST: Players/Create
+        // POST: Venues/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DisplayName,TitleId,CurrentElo,PeakElo,FirstName,LastName,Winrate,TotalGamesCount,Birthday,Email,Wins,Draws,Loses")] Player player)
+        public async Task<IActionResult> Create([Bind("Id,Name,City,Country,Adress")] Venue venue)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(player);
+                _context.Add(venue);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TitleId"] = new SelectList(_context.Titles, "Id", "ShortName", player.TitleId);
-            return View(player);
+            return View(venue);
         }
 
-        // GET: Players/Edit/5
+        // GET: Venues/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,23 +72,22 @@ namespace ChessinatorInfrastructure.Controllers
                 return NotFound();
             }
 
-            var player = await _context.Players.FindAsync(id);
-            if (player == null)
+            var venue = await _context.Venues.FindAsync(id);
+            if (venue == null)
             {
                 return NotFound();
             }
-            ViewData["TitleId"] = new SelectList(_context.Titles, "Id", "ShortName", player.TitleId);
-            return View(player);
+            return View(venue);
         }
 
-        // POST: Players/Edit/5
+        // POST: Venues/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DisplayName,TitleId,CurrentElo,PeakElo,FirstName,LastName,Winrate,TotalGamesCount,Birthday,Email,Wins,Draws,Loses")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,City,Country,Adress")] Venue venue)
         {
-            if (id != player.Id)
+            if (id != venue.Id)
             {
                 return NotFound();
             }
@@ -101,12 +96,12 @@ namespace ChessinatorInfrastructure.Controllers
             {
                 try
                 {
-                    _context.Update(player);
+                    _context.Update(venue);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlayerExists(player.Id))
+                    if (!VenueExists(venue.Id))
                     {
                         return NotFound();
                     }
@@ -117,11 +112,10 @@ namespace ChessinatorInfrastructure.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TitleId"] = new SelectList(_context.Titles, "Id", "ShortName", player.TitleId);
-            return View(player);
+            return View(venue);
         }
 
-        // GET: Players/Delete/5
+        // GET: Venues/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,35 +123,34 @@ namespace ChessinatorInfrastructure.Controllers
                 return NotFound();
             }
 
-            var player = await _context.Players
-                .Include(p => p.Title)
+            var venue = await _context.Venues
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (player == null)
+            if (venue == null)
             {
                 return NotFound();
             }
 
-            return View(player);
+            return View(venue);
         }
 
-        // POST: Players/Delete/5
+        // POST: Venues/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var player = await _context.Players.FindAsync(id);
-            if (player != null)
+            var venue = await _context.Venues.FindAsync(id);
+            if (venue != null)
             {
-                _context.Players.Remove(player);
+                _context.Venues.Remove(venue);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PlayerExists(int id)
+        private bool VenueExists(int id)
         {
-            return _context.Players.Any(e => e.Id == id);
+            return _context.Venues.Any(e => e.Id == id);
         }
     }
 }
