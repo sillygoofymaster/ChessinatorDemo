@@ -43,6 +43,7 @@ public partial class Player
     public DateTime Birthday { get; set; }
 
     [Display(Name = "Пошта")]
+    [DataType(DataType.EmailAddress)]
     public string? Email { get; set; }
 
     [Display(Name = "Кількість перемог")]
@@ -60,5 +61,6 @@ public partial class Player
 
     public virtual ICollection<PlayerTournament> PlayerTournaments { get; set; } = new List<PlayerTournament>();
 
+    [Display(Name = "Титул")]
     public virtual Title? Title { get; set; } = null!;
 }

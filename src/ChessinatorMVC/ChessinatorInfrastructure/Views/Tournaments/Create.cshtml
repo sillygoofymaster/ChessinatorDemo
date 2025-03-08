@@ -13,14 +13,13 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TournamentTypeId" class="control-label"></label>
+                <select asp-for="TournamentTypeId" class ="form-control" asp-items="ViewBag.TournamentTypeId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="StartTime" class="control-label"></label>
@@ -34,7 +33,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsOnline" /> @Html.DisplayNameFor(model => model.IsOnline)
+                    <input class="form-check-input" asp-for="IsOnline" id="isOnlineCheckbox" /> @Html.DisplayNameFor(model => model.IsOnline)
                 </label>
             </div>
             <div class="form-group form-check">
@@ -57,10 +56,30 @@
                 <input asp-for="Link" class="form-control" />
                 <span asp-validation-for="Link" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="venueField">
                 <label asp-for="VenueId" class="control-label"></label>
                 <select asp-for="VenueId" class ="form-control" asp-items="ViewBag.VenueId"></select>
             </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var isOnlineCheckbox = document.getElementById("isOnlineCheckbox");
+                    var venueField = document.getElementById("venueField");
+
+                    function toggleVenueField() {
+                        if (isOnlineCheckbox.checked) {
+                            venueField.style.display = "none"; // Hide Venue field
+                        } else {
+                            venueField.style.display = "block"; // Show Venue field
+                        }
+                    }
+
+                    // Run on page load
+                    toggleVenueField();
+
+                    // Listen for checkbox changes
+                    isOnlineCheckbox.addEventListener("change", toggleVenueField);
+                });
+            </script>
             <div class="form-group">
                 <label asp-for="TimeControlId" class="control-label"></label>
                 <select asp-for="TimeControlId" class ="form-control" asp-items="ViewBag.TimeControlId"></select>
@@ -68,6 +87,11 @@
             <div class="form-group">
                 <label asp-for="OrganizerId" class="control-label"></label>
                 <select asp-for="OrganizerId" class ="form-control" asp-items="ViewBag.OrganizerId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

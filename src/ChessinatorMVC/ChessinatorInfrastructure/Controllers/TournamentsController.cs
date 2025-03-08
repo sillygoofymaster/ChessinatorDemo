@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChessinatorDomain.Model;
-using ChessinatorInfrastructure;
 
 namespace ChessinatorInfrastructure.Controllers
 {
@@ -22,7 +21,7 @@ namespace ChessinatorInfrastructure.Controllers
         // GET: Tournaments
         public async Task<IActionResult> Index()
         {
-            var chessdbContext = _context.Tournaments.Include(t => t.Organizer).Include(t => t.TimeControl).Include(t => t.Venue);
+            var chessdbContext = _context.Tournaments.Include(t => t.Organizer).Include(t => t.TimeControl).Include(t => t.TournamentType).Include(t => t.Venue);
             return View(await chessdbContext.ToListAsync());
         }
 
@@ -37,6 +36,7 @@ namespace ChessinatorInfrastructure.Controllers
             var tournament = await _context.Tournaments
                 .Include(t => t.Organizer)
                 .Include(t => t.TimeControl)
+                .Include(t => t.TournamentType)
                 .Include(t => t.Venue)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tournament == null)
@@ -50,9 +50,18 @@ namespace ChessinatorInfrastructure.Controllers
         // GET: Tournaments/Create
         public IActionResult Create()
         {
-            ViewData["OrganizerId"] = new SelectList(_context.Organizers, "Id", "Email");
-            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Type");
-            ViewData["VenueId"] = new SelectList(_context.Venues, "Id", "Adress");
+            ViewData["OrganizerId"] = new SelectList(_context.Organizers, "Id", "Name");
+            ViewData["TimeControlId"] = new SelectList(
+        _context.TimeControls.Select(tc => new
+        {
+            tc.Id,
+            DisplayText = tc.BaseMinutes + " | " + tc.IncSeconds
+        }),
+        "Id",
+        "DisplayText"
+    );
+            ViewData["TournamentTypeId"] = new SelectList(_context.TournamentTypes, "Id", "Name");
+            ViewData["VenueId"] = new SelectList(_context.Venues, "Id", "Name");
             return View();
         }
 
@@ -61,7 +70,7 @@ namespace ChessinatorInfrastructure.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Type,Name,StartTime,EndTime,IsOnline,IsOpen,PlayerLimit,RoundCount,Link,VenueId,TimeControlId,OrganizerId,Id")] Tournament tournament)
+        public async Task<IActionResult> Create([Bind("Id,Name,TournamentTypeId,StartTime,EndTime,IsOnline,IsOpen,PlayerLimit,RoundCount,Link,VenueId,TimeControlId,OrganizerId")] Tournament tournament)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +79,8 @@ namespace ChessinatorInfrastructure.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrganizerId"] = new SelectList(_context.Organizers, "Id", "Email", tournament.OrganizerId);
-            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Type", tournament.TimeControlId);
+            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Id", tournament.TimeControlId);
+            ViewData["TournamentTypeId"] = new SelectList(_context.TournamentTypes, "Id", "Name", tournament.TournamentTypeId);
             ViewData["VenueId"] = new SelectList(_context.Venues, "Id", "Adress", tournament.VenueId);
             return View(tournament);
         }
@@ -89,7 +99,8 @@ namespace ChessinatorInfrastructure.Controllers
                 return NotFound();
             }
             ViewData["OrganizerId"] = new SelectList(_context.Organizers, "Id", "Email", tournament.OrganizerId);
-            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Type", tournament.TimeControlId);
+            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Id", tournament.TimeControlId);
+            ViewData["TournamentTypeId"] = new SelectList(_context.TournamentTypes, "Id", "Name", tournament.TournamentTypeId);
             ViewData["VenueId"] = new SelectList(_context.Venues, "Id", "Adress", tournament.VenueId);
             return View(tournament);
         }
@@ -99,7 +110,7 @@ namespace ChessinatorInfrastructure.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Type,Name,StartTime,EndTime,IsOnline,IsOpen,PlayerLimit,RoundCount,Link,VenueId,TimeControlId,OrganizerId,Id")] Tournament tournament)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TournamentTypeId,StartTime,EndTime,IsOnline,IsOpen,PlayerLimit,RoundCount,Link,VenueId,TimeControlId,OrganizerId")] Tournament tournament)
         {
             if (id != tournament.Id)
             {
@@ -127,7 +138,8 @@ namespace ChessinatorInfrastructure.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["OrganizerId"] = new SelectList(_context.Organizers, "Id", "Email", tournament.OrganizerId);
-            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Type", tournament.TimeControlId);
+            ViewData["TimeControlId"] = new SelectList(_context.TimeControls, "Id", "Id", tournament.TimeControlId);
+            ViewData["TournamentTypeId"] = new SelectList(_context.TournamentTypes, "Id", "Name", tournament.TournamentTypeId);
             ViewData["VenueId"] = new SelectList(_context.Venues, "Id", "Adress", tournament.VenueId);
             return View(tournament);
         }
@@ -143,6 +155,7 @@ namespace ChessinatorInfrastructure.Controllers
             var tournament = await _context.Tournaments
                 .Include(t => t.Organizer)
                 .Include(t => t.TimeControl)
+                .Include(t => t.TournamentType)
                 .Include(t => t.Venue)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tournament == null)

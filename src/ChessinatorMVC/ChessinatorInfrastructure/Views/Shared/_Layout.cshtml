@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ChessinatorInfrastructure</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap_slate.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ChessinatorInfrastructure.styles.css" asp-append-version="true" />
 </head>
@@ -12,7 +12,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ChessinatorInfrastructure</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logobg.png" style="width: 100px; height: 100px;" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,16 +31,23 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Players" asp-action="Index">Гравці</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ChessMatches" asp-action="Index">Матчі</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Tournaments" asp-action="Index">Турніри</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Titles" asp-action="Index">Титули</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Venues" asp-action="Index">Місця проведення</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="TimeControls" asp-action="Index">Часові контролі</a>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Інші
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Venues" asp-action="Index">Локації</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="TimeControls" asp-action="Index">Часові контролі</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="TimeControlTypes" asp-action="Index">Часові контролі (типи)</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Organizers" asp-action="Index">Організатори</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="TournamentTypes" asp-action="Index">ТипиТ</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

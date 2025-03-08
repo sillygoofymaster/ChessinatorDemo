@@ -10,6 +10,7 @@ public partial class Venue
 
     [RequiredWithMessageAttribute]
     [Display(Name = "Назва")]
+    [StringLength(30, ErrorMessage = "Назва мусить містити від {1} до {2} символів.", MinimumLength = 3)]
     public string Name { get; set; } = null!;
 
     [RequiredWithMessageAttribute]

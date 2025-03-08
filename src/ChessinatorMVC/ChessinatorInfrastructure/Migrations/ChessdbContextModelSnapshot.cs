@@ -36,12 +36,12 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MatchResultId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Moves")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Result")
-                        .HasColumnType("int");
 
                     b.Property<int>("RoundNumber")
                         .HasColumnType("int");
@@ -57,6 +57,8 @@ namespace ChessinatorInfrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MatchResultId");
+
                     b.HasIndex(new[] { "BlackPlayerId" }, "IX_ChessMatch_BlackPlayerId");
 
                     b.HasIndex(new[] { "TournamentId" }, "IX_ChessMatch_TournamentId");
@@ -64,6 +66,27 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasIndex(new[] { "WhitePlayerId" }, "IX_ChessMatch_WhitePlayerId");
 
                     b.ToTable("ChessMatch", (string)null);
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.MatchResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MatchResults");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Organizer", b =>
@@ -189,13 +212,32 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Property<int>("IncSeconds")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("TimeControl", (string)null);
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.TimeControlType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TimeControlTypes");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Title", b =>
@@ -207,11 +249,13 @@ namespace ChessinatorInfrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("LongName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("ShortName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -225,6 +269,9 @@ namespace ChessinatorInfrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
@@ -240,7 +287,8 @@ namespace ChessinatorInfrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
@@ -257,14 +305,15 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Property<int>("TimeControlId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TournamentTypeId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("VenueId")
+                    b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TournamentTypeId");
 
                     b.HasIndex(new[] { "OrganizerId" }, "IX_Tournament_OrganizerId");
 
@@ -273,6 +322,24 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasIndex(new[] { "VenueId" }, "IX_Tournament_VenueId");
 
                     b.ToTable("Tournament", (string)null);
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.TournamentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TournamentTypes");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Venue", b =>
@@ -297,7 +364,8 @@ namespace ChessinatorInfrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
@@ -311,9 +379,16 @@ namespace ChessinatorInfrastructure.Migrations
                         .HasForeignKey("BlackPlayerId")
                         .IsRequired();
 
+                    b.HasOne("ChessinatorDomain.Model.MatchResult", "MatchResult")
+                        .WithMany("Matches")
+                        .HasForeignKey("MatchResultId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ChessinatorDomain.Model.Tournament", "Tournament")
                         .WithMany("ChessMatches")
-                        .HasForeignKey("TournamentId");
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ChessinatorDomain.Model.Player", "WhitePlayer")
                         .WithMany("ChessMatchWhitePlayers")
@@ -321,6 +396,8 @@ namespace ChessinatorInfrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("BlackPlayer");
+
+                    b.Navigation("MatchResult");
 
                     b.Navigation("Tournament");
 
@@ -357,6 +434,17 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Navigation("Tournament");
                 });
 
+            modelBuilder.Entity("ChessinatorDomain.Model.TimeControl", b =>
+                {
+                    b.HasOne("ChessinatorDomain.Model.TimeControlType", "Type")
+                        .WithMany("TimeControls")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("ChessinatorDomain.Model.Tournament", b =>
                 {
                     b.HasOne("ChessinatorDomain.Model.Organizer", "Organizer")
@@ -371,15 +459,30 @@ namespace ChessinatorInfrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ChessinatorDomain.Model.TournamentType", "TournamentType")
+                        .WithMany("Tournaments")
+                        .HasForeignKey("TournamentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ChessinatorDomain.Model.Venue", "Venue")
                         .WithMany("Tournaments")
-                        .HasForeignKey("VenueId");
+                        .HasForeignKey("VenueId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Organizer");
 
                     b.Navigation("TimeControl");
 
+                    b.Navigation("TournamentType");
+
                     b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.MatchResult", b =>
+                {
+                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Organizer", b =>
@@ -401,6 +504,11 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Navigation("Tournaments");
                 });
 
+            modelBuilder.Entity("ChessinatorDomain.Model.TimeControlType", b =>
+                {
+                    b.Navigation("TimeControls");
+                });
+
             modelBuilder.Entity("ChessinatorDomain.Model.Title", b =>
                 {
                     b.Navigation("Players");
@@ -411,6 +519,11 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Navigation("ChessMatches");
 
                     b.Navigation("PlayerTournaments");
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.TournamentType", b =>
+                {
+                    b.Navigation("Tournaments");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Venue", b =>

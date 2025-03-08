@@ -21,7 +21,8 @@ namespace ChessinatorInfrastructure.Controllers
         // GET: TimeControls
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TimeControls.ToListAsync());
+            var chessdbContext = _context.TimeControls.Include(t => t.Type);
+            return View(await chessdbContext.ToListAsync());
         }
 
         // GET: TimeControls/Details/5
@@ -33,6 +34,7 @@ namespace ChessinatorInfrastructure.Controllers
             }
 
             var timeControl = await _context.TimeControls
+                .Include(t => t.Type)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeControl == null)
             {
@@ -45,6 +47,7 @@ namespace ChessinatorInfrastructure.Controllers
         // GET: TimeControls/Create
         public IActionResult Create()
         {
+            ViewData["TypeId"] = new SelectList(_context.TimeControlTypes, "Id", "Name");
             return View();
         }
 
@@ -53,7 +56,7 @@ namespace ChessinatorInfrastructure.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BaseMinutes,IncSeconds,Type")] TimeControl timeControl)
+        public async Task<IActionResult> Create([Bind("Id,BaseMinutes,IncSeconds,TypeId")] TimeControl timeControl)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +64,7 @@ namespace ChessinatorInfrastructure.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TypeId"] = new SelectList(_context.TimeControlTypes, "Id", "Name", timeControl.TypeId);
             return View(timeControl);
         }
 
@@ -77,6 +81,7 @@ namespace ChessinatorInfrastructure.Controllers
             {
                 return NotFound();
             }
+            ViewData["TypeId"] = new SelectList(_context.TimeControlTypes, "Id", "Name", timeControl.TypeId);
             return View(timeControl);
         }
 
@@ -85,7 +90,7 @@ namespace ChessinatorInfrastructure.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BaseMinutes,IncSeconds,Type")] TimeControl timeControl)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BaseMinutes,IncSeconds,TypeId")] TimeControl timeControl)
         {
             if (id != timeControl.Id)
             {
@@ -112,6 +117,7 @@ namespace ChessinatorInfrastructure.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["TypeId"] = new SelectList(_context.TimeControlTypes, "Id", "Name", timeControl.TypeId);
             return View(timeControl);
         }
 
@@ -124,6 +130,7 @@ namespace ChessinatorInfrastructure.Controllers
             }
 
             var timeControl = await _context.TimeControls
+                .Include(t => t.Type)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeControl == null)
             {

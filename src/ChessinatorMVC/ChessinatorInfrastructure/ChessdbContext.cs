@@ -30,6 +30,9 @@ public partial class ChessdbContext : DbContext
     public virtual DbSet<Tournament> Tournaments { get; set; }
 
     public virtual DbSet<Venue> Venues { get; set; }
+    public virtual DbSet<TimeControlType> TimeControlTypes { get; set; }
+    public virtual DbSet<TournamentType> TournamentTypes { get; set; }
+    public virtual DbSet<MatchResult> MatchResults { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
@@ -50,7 +53,7 @@ public partial class ChessdbContext : DbContext
                 .HasForeignKey(d => d.BlackPlayerId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.Tournament).WithMany(p => p.ChessMatches).HasForeignKey(d => d.TournamentId);
+            entity.HasOne(d => d.Tournament).WithMany(p => p.ChessMatches).HasForeignKey(d => d.TournamentId).OnDelete(DeleteBehavior.SetNull); ;
 
             entity.HasOne(d => d.WhitePlayer).WithMany(p => p.ChessMatchWhitePlayers)
                 .HasForeignKey(d => d.WhitePlayerId)

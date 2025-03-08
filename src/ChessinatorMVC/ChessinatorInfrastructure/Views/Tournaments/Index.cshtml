@@ -13,16 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                Дати проведення
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsOnline)
@@ -46,7 +40,13 @@
                 @Html.DisplayNameFor(model => model.TimeControl)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.TournamentType)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Venue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th></th>
         </tr>
@@ -55,16 +55,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
+                @(item.StartTime.ToString("dd.MM.yyyy HH:mm") + " - " + item.EndTime.ToString("dd.MM.yyyy HH:mm"))
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsOnline)
@@ -82,13 +76,19 @@
                 @Html.DisplayFor(modelItem => item.Link)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Organizer.Email)
+                @Html.DisplayFor(modelItem => item.Organizer.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TimeControl.Type)
+                    @(item.TimeControl != null ? $"{item.TimeControl.BaseMinutes} | {item.TimeControl.IncSeconds}" : "N/A")
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TournamentType.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Venue.Adress)
+                @Html.DisplayFor(modelItem => item.Venue.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -99,3 +99,66 @@
 }
     </tbody>
 </table>
+
+<div class="row">
+    <div class="col-3">
+        <div id="countByTypeChart"></div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            fetch('/api/charts/countByType')
+                .then(response => response.json())
+                .then(data => {
+                    const dataTable = new google.visualization.DataTable();
+                    dataTable.addColumn('string', 'Тип');
+                    dataTable.addColumn('number', 'Кількість турнірів');
+
+                    const colorMap = {
+                    0: '#EEEEEE', // Red for ID 0
+                    1: '#222831', // Green for ID 1
+                    2: '#A5CBC3'  // Blue for ID 2
+                    };
+
+
+                    data.forEach(item => {
+                        dataTable.addRow([item.type, item.count]);
+                 });
+
+                    const options = {
+                        title: 'Турніри за типами',
+                        width: 600,
+                        height: 400,
+                        legend: { position: 'none' },
+                        backgroundColor: '#31363F',
+                        colors: ['#A5CBC3'],
+                                // Change title text color
+                        titleTextStyle: {
+                        color: '#EEEEEE', // Red title text
+                        fontSize: 18,
+                        bold: true
+                        },
+                                hAxis: {
+                        textStyle: { color: '#EEEEEE' } // Green X-axis labels
+                        },
+
+                        // Change Y-axis text color
+                        vAxis: {
+                        textStyle: { color: '#EEEEEE' } // Blue Y-axis labels
+                        },
+                    };
+
+                    const chart = new google.visualization.ColumnChart(document.getElementById('countByTypeChart'));
+
+                    chart.draw(dataTable, options);
+                });
+        }
+    </script>
+}

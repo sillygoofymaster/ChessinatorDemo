@@ -18,7 +18,10 @@ public partial class TimeControl
 
     [RequiredWithMessageAttribute]
     [Display(Name = "Тип")]
-    public string Type { get; set; } = null!;
+    public int TypeId { get; set; }
+
+    [Display(Name = "Тип")]
+    public virtual TimeControlType? Type { get; set; } = null!;
 
     public virtual ICollection<Tournament> Tournaments { get; set; } = new List<Tournament>();
 }
