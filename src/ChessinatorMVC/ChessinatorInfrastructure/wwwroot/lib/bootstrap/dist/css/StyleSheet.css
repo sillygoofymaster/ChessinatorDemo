@@ -1,0 +1,142 @@
+﻿:root {
+    --navblack: #222831;
+    --backgroundblack: #31363f;
+    --headerwhite: #EEEEEE;
+    --darkerwhite: #D6D6D6;
+    --bluish: #76abae;
+    --darkerbluish: #4E878C;
+    --red: #931621;
+}
+
+@font-face {
+    font-family: 'playfair';
+    src: url('../../../../fonts/playfair_9pt-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'playfair';
+    src: url('../../../../fonts/playfair_9pt_semicondensed-bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+strong, b {
+    font-weight: 700; 
+}
+
+body {
+    background: url('../../../../images/newboard.png') left repeat-y,url('../../../../images/newboard.png') right repeat-y;
+    background-size: auto 12%;
+    background-color: var(--backgroundblack);
+    margin-bottom: 60px;
+    color: var(--darkerwhite) !important;
+    font-family: 'playfair';
+    font-weight: 400;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    color: var(--headerwhite) !important;
+}
+
+
+a {
+    color: #76ABAE !important;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #afced0 !important;
+}
+
+
+
+/*///////////////NAVBAR/////////////*/
+.footer {
+    background-color: var(--navblack) !important;
+}
+
+@font-face {
+    font-family: 'tektur-regular';
+    src: url('../../../../fonts/tektur-regular.ttf') format('truetype');
+}
+
+.navbar-brand {
+    font-family: 'tektur-regular', monospace;
+    color: #76abae !important; 
+    font-size: 1.5rem; 
+    text-decoration: none; 
+}
+
+
+.navbar-brand img {
+        height: 100px; 
+        width: auto; 
+        max-height: 100%; 
+    }
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+}
+
+.navbar {
+    background-color: var(--navblack) !important;
+}
+
+    .navbar .navbar-brand,
+    .navbar .nav-link {
+        color: var(--headerwhite) !important;
+    }
+
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus {
+            background-color: #111 !important;
+        }
+
+        .navbar .nav-link.active {
+            color: #76ABAE !important;
+        }
+
+
+/*////////TABLE///////////*/
+table {
+    background-color: var(--navblack) !important;
+    color: var(--darkerwhite) !important;
+}
+
+.table tbody tr {
+    background-color: var(--navblack) !important;
+}
+
+.table tbody td {
+    background-color: var(--navblack) !important;
+}
+
+.table thead th {
+    background-color: var(--navblack) !important;
+}
+
+
+
+/*/////////BTN//////*/
+.btn-danger {
+    background-color: #c1292e;
+    border-color: #691619;
+    color: var(--headerwhite) !important;
+}
+
+.btn-primary {
+    color: var(--headerwhite) !important;
+}

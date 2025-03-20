@@ -121,41 +121,36 @@
                     dataTable.addColumn('string', 'Тип');
                     dataTable.addColumn('number', 'Кількість турнірів');
 
-                    const colorMap = {
-                    0: '#EEEEEE', // Red for ID 0
-                    1: '#222831', // Green for ID 1
-                    2: '#A5CBC3'  // Blue for ID 2
-                    };
-
-
                     data.forEach(item => {
                         dataTable.addRow([item.type, item.count]);
-                 });
+                    });
 
                     const options = {
                         title: 'Турніри за типами',
                         width: 600,
                         height: 400,
-                        legend: { position: 'none' },
                         backgroundColor: '#31363F',
-                        colors: ['#A5CBC3'],
-                                // Change title text color
+                        colors: ['#A5CBC3', '#EEEEEE', '#222831'], 
+
                         titleTextStyle: {
-                        color: '#EEEEEE', // Red title text
-                        fontSize: 18,
-                        bold: true
-                        },
-                                hAxis: {
-                        textStyle: { color: '#EEEEEE' } // Green X-axis labels
+                            color: '#EEEEEE',
+                            fontSize: 18,
+                            bold: true
                         },
 
-                        // Change Y-axis text color
-                        vAxis: {
-                        textStyle: { color: '#EEEEEE' } // Blue Y-axis labels
+                        legend: {
+                            textStyle: { color: '#EEEEEE' }
                         },
+
+                        pieSliceTextStyle: {
+                            color: '#000000'
+                        },
+
+                        pieHole: 0.4,
+
                     };
 
-                    const chart = new google.visualization.ColumnChart(document.getElementById('countByTypeChart'));
+                    const chart = new google.visualization.PieChart(document.getElementById('countByTypeChart'));
 
                     chart.draw(dataTable, options);
                 });
