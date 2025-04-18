@@ -5,12 +5,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChessinatorDomain.Model;
 
-public partial class Player
+public partial class Player : Entity
 {
-    public int Id { get; set; }
-
-    [Display(Name = "Ім'я")]
-    public string? DisplayName { get; private set; }
 
     [RequiredWithMessageAttribute]
     [Display(Name = "Титул")]
@@ -24,36 +20,25 @@ public partial class Player
     [Display(Name = "Піковий рейтинг")]
     public int PeakElo { get; set; }
 
-    [RequiredWithMessageAttribute]
     [Display(Name ="Ім'я")]
-    public string FirstName { get; set; } = null!;
+    public string? FirstName { get; set; }
 
-    [RequiredWithMessageAttribute]
+    [Display(Name = "Нікнейм")]
+    public string Username { get; set; } = null!;
+
     [Display(Name = "Прізвище")]
-    public string LastName { get; set; } = null!;
-
-    public double? Winrate { get; private set; }
+    public string? LastName { get; set; }
 
     [Display(Name = "Зіграно матчів")]
-    public int? TotalGamesCount { get; private set; }
+    public int? TotalGamesCount { get; set; }
 
     [DataType(DataType.Date)]
     [RequiredWithMessageAttribute]
     [Display(Name = "Дата народження")]
     public DateTime Birthday { get; set; }
 
-    [Display(Name = "Пошта")]
-    [DataType(DataType.EmailAddress)]
-    public string? Email { get; set; }
-
-    [Display(Name = "Кількість перемог")]
-    public int Wins { get; set; }
-
-    [Display(Name = "Кількість нічиїх")]
-    public int Draws { get; set; }
-
-    [Display(Name = "Кількість поразок")]
-    public int Loses { get; set; }
+    [Display(Name = "Про себе (контактна інформація)")]
+    public string? Details { get; set; }
 
     public virtual ICollection<ChessMatch> ChessMatchBlackPlayers { get; set; } = new List<ChessMatch>();
 
@@ -62,5 +47,9 @@ public partial class Player
     public virtual ICollection<PlayerTournament> PlayerTournaments { get; set; } = new List<PlayerTournament>();
 
     [Display(Name = "Титул")]
-    public virtual Title? Title { get; set; } = null!;
+    public virtual Title? Title { get; set; }
+
+    public string UserId { get; set; } = null!;
+    public User? User { get; set; }
+    public string? ProfilePicturePath { get; set; }
 }

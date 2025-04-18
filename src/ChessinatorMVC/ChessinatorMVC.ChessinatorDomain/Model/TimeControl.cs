@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChessinatorDomain.Model;
 
-public partial class TimeControl
+public partial class TimeControl : Entity
 {
-    public int Id { get; set; }
 
     [RequiredWithMessageAttribute]
     [Display(Name = "Базовий час")]

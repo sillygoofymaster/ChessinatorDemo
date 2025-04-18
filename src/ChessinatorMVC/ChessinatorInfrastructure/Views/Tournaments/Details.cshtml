@@ -1,4 +1,5 @@
-﻿@model ChessinatorDomain.Model.Tournament
+﻿@model ChessinatorInfrastructure.ViewModel.TournamentDetailsViewModel
+
 
 @{
     ViewData["Title"] = "Details";
@@ -11,80 +12,160 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Tournament.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Tournament.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartTime)
+            @Html.DisplayNameFor(model => model.Tournament.StartTime)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartTime)
+            @Html.DisplayFor(model => model.Tournament.StartTime)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayNameFor(model => model.Tournament.EndTime)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndTime)
+            @Html.DisplayFor(model => model.Tournament.EndTime)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsOnline)
+            @Html.DisplayNameFor(model => model.Tournament.IsOnline)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsOnline)
+            @Html.DisplayFor(model => model.Tournament.IsOnline)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsOpen)
+            @Html.DisplayNameFor(model => model.Tournament.IsOpen)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsOpen)
+            @Html.DisplayFor(model => model.Tournament.IsOpen)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PlayerLimit)
+            @Html.DisplayNameFor(model => model.Tournament.PlayerLimit)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PlayerLimit)
+            @Html.DisplayFor(model => model.Tournament.PlayerLimit)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RoundCount)
+            @Html.DisplayNameFor(model => model.Tournament.RoundCount)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RoundCount)
+            @Html.DisplayFor(model => model.Tournament.RoundCount)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Link)
+            @Html.DisplayNameFor(model => model.Tournament.Link)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Link)
+            @Html.DisplayFor(model => model.Tournament.Link)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Organizer)
+            @Html.DisplayNameFor(model => model.Tournament.Description)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Organizer.Email)
+            @Html.DisplayFor(model => model.Tournament.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TimeControl)
+            @Html.DisplayNameFor(model => model.Tournament.Organizer)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TimeControl.Id)
+            @Html.DisplayFor(model => model.Tournament.Organizer.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TournamentType)
+            @Html.DisplayNameFor(model => model.Tournament.TimeControl)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TournamentType.Name)
+            @Html.DisplayFor(model => model.Tournament.TimeControl.Id)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Venue)
+            @Html.DisplayNameFor(model => model.Tournament.TournamentType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Venue.Adress)
+            @Html.DisplayFor(model => model.Tournament.TournamentType.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tournament.Venue)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tournament.Venue.Adress)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?Tournament.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@* <div>
+    @if(Model.ChessMatches.Any()) {
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ChessMatch.RoundNumber)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.StartTime)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.EndTime)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.Moves)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.BlackPlayer)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.Tournament)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.WhitePlayer)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.ChessMatch.MatchResult)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ChessMatches)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoundNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Moves)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BlackPlayer.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tournament.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WhitePlayer.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MatchResult.Result)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+</div>
+
+ *@

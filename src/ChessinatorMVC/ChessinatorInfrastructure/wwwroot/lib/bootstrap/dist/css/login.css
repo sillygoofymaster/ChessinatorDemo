@@ -1,0 +1,149 @@
+﻿body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logcontainer {
+    text-align: left;
+    background: #222831;
+    max-width: 400px;
+    width: 100%;
+    padding: 25px 30px;
+    border-radius: 5px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15);
+    border: 50px solid transparent; /* Create space for the border image */
+    border-image: url('../../../../images/testbg.png')30 / 15px round;
+    margin-bottom: 60px;
+}
+
+#logcontainder .form {
+    grid-template-columns: 1fr 1fr; /* creates 2 columns */
+    gap: 20px; /* creates a gap between the columns and rows */
+}
+
+    #logcontainer form .title {
+        font-size: 30px;
+        font-weight: 600;
+        margin: 20px 0 10px 0;
+        position: relative;
+        text-align: left;
+    }
+
+        #logcontainer form .title:before {
+            content: '';
+            position: absolute;
+            height: 4px;
+            width: 33px;
+            left: 0px;
+            bottom: 3px;
+            border-radius: 5px;
+            background: #76abae;
+        }
+
+    #logcontainer form .input-box {
+        width: 100%;
+        height: 45px;
+        margin-top: 25px;
+        position: relative;
+    }
+
+    #logcontainer form .check {
+        margin-top: 25px;
+        position: relative;
+    }
+        #logcontainer form .check label {
+            margin-left: 10px;
+        }
+
+        #logcontainer form .input-box input {
+            width: 100%;
+            height: 100%;
+            outline: none;
+            font-size: 16px;
+            border: none;
+        }
+
+    #logcontainer form .underline::before {
+        content: '';
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #931621;
+        left: 0;
+        bottom: 0;
+    }
+
+    #logcontainer form .underline::after {
+        content: '';
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #76abae;
+        left: 0;
+        bottom: 0;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: all 0.3s ease;
+    }
+
+    #logcontainer form .input-box input:focus ~ .underline::after,
+    #logcontainer form .input-box input:valid ~ .underline::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    #logcontainer form .button {
+        margin: 40px 0 20px 0;
+    }
+
+#logcontainer .input-box input[type="submit"],
+#logcontainer .input-box input[type="button"],
+#logcontainer .input-box button,
+.input-box.button a {
+    background: #76abae;
+    font-size: 17px;
+    color: #f2f2f2;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+    #logcontainer .input-box input[type="submit"]:hover,
+    #logcontainer .input-box input[type="button"]:hover,
+    #logcontainer .input-box button:hover,
+    .input-box.button a:hover{
+        letter-spacing: 1px;
+        background: #4E878C;
+        color: #D6D6D6;
+    }
+
+    #logcontainer .option {
+        font-size: 14px;
+        text-align: center;
+    }
+
+.double-input {
+    display: flex;
+    gap: 20px; /* Adjust the spacing as needed */
+}
+
+    .double-input .input-box {
+        flex: 1; /* Makes each take up equal space */
+    }
+
+input {
+    padding-left: 10px; /* adjust the value as needed */
+}
+#logcontainer .input-box input::placeholder {
+    font-size: 14px; /* Adjust the size as needed */
+}

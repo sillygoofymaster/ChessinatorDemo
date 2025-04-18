@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Вибір ролі";
+}
+
+<head>
+    <link href="~/lib/bootstrap/dist/css/login.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="main-content">
+        <div id="logcontainer">
+            <form>
+                <div class="title">Реєстрація</div>
+                <a asp-controller="Account" asp-action="RegisterOrganizer" class="btn btn-primary">Зареєструватися як організатор</a>
+                <a asp-controller="Account" asp-action="RegisterPlayer" class="btn btn-primary">Зареєструватися як гравець</a>
+            </form>
+        </div>
+    </div>
+</body>

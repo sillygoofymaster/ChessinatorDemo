@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChessinatorDomain.Model;
 
-public partial class Title
+public partial class Title : Entity
 {
-    public int Id { get; set; }
 
     [RequiredWithMessageAttribute]
     [Display(Name = "Стисла назва")]

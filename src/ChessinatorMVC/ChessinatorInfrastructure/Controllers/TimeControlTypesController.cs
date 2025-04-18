@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChessinatorDomain.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChessinatorInfrastructure.Controllers
 {
@@ -43,6 +44,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: TimeControlTypes/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +53,7 @@ namespace ChessinatorInfrastructure.Controllers
         // POST: TimeControlTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] TimeControlType timeControlType)
@@ -65,6 +68,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: TimeControlTypes/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,6 +87,7 @@ namespace ChessinatorInfrastructure.Controllers
         // POST: TimeControlTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] TimeControlType timeControlType)
@@ -116,6 +121,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: TimeControlTypes/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +140,9 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // POST: TimeControlTypes/Delete/5
+
+        [Authorize(Roles = "admin")]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

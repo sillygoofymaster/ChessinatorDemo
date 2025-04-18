@@ -63,42 +63,88 @@ a:hover {
     background-color: var(--navblack) !important;
 }
 
+.footer-container {
+}
+
+
 @font-face {
     font-family: 'tektur-regular';
     src: url('../../../../fonts/tektur-regular.ttf') format('truetype');
 }
 
 .navbar-brand {
-    font-family: 'tektur-regular', monospace;
-    color: #76abae !important; 
-    font-size: 1.5rem; 
-    text-decoration: none; 
+    flex-grow: 1; /* Makes the navbar-brand take up all available space */
+    height: 100%; /* Ensures navbar-brand takes up the full height of the navbar */
+    display: flex;
+    align-items: center; /* Centers the logo vertically */
+    margin: 10px; /* Remove margin */
+    padding: 10px; /* Remove padding */
 }
 
 
-.navbar-brand img {
-        height: 100px; 
-        width: auto; 
-        max-height: 100%; 
+    .navbar-brand img {
+        height: 85px;
+        width: auto;
+        max-height: 100px;
+
     }
 
 .navbar-nav {
+    font-size: 18px !important; /* Adjust the size as needed */
     display: flex;
     align-items: center;
+    background-color: var(--navblack) !important;
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
 }
 
-.navbar-nav .nav-item {
-    margin-left: 15px;
-}
+    .navbar-nav .nav-item {
+        margin-left: 15px;
+        margin: 0; /* Remove margin */
+        padding: 0; /* Remove padding */
+    }
 
 .navbar {
+    /*height: 60px;*/ /* Set a fixed height for the navbar */
+    width: 100% !important;
+    display: flex !important;
+    background-color: var(--navblack) !important;
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+}
+
+.navbar-link {
+    padding: 20px 30px !important; /* Add padding for more space */
+    font-weight: bold !important; /* Optional: Makes the text bold */
     background-color: var(--navblack) !important;
 }
 
-    .navbar .navbar-brand,
-    .navbar .nav-link {
-        color: var(--headerwhite) !important;
-    }
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center; /* Vertically center each nav item */
+    border-left: 1px solid var(--backgroundblack);
+    border-right: 1px solid var(--backgroundblack);
+    padding: 0;
+}
+
+.navbar-collapse {
+    width: 100%;
+    display: flex;
+    height: 100%;
+}
+.navbar-nav.flex-grow-1 {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start; /* Adjust as needed (flex-start, center, space-between, etc.) */
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: var(--headerwhite) !important;
+    height: 100%;
+    border: none; 
+    outline: none;  
+}
 
         .navbar .nav-link:hover,
         .navbar .nav-link:focus {
@@ -108,6 +154,13 @@ a:hover {
         .navbar .nav-link.active {
             color: #76ABAE !important;
         }
+
+.navbar-nav.upper-controls {
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 85% !important;
+}
 
 
 /*////////TABLE///////////*/
@@ -138,5 +191,44 @@ table {
 }
 
 .btn-primary {
-    color: var(--headerwhite) !important;
+    margin: 40px 0 20px 0;
+    background: #76abae !important;
+    font-size: 17px !important;
+    color: #f2f2f2 !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
 }
+    .btn-primary:hover {
+        letter-spacing: 1px;
+        background: #4E878C;
+        color: #D6D6D6;
+    }
+
+.input-box input[type="submit"]:hover {
+    letter-spacing: 1px;
+    background: #4E878C;
+    color: #D6D6D6;
+}
+
+.input-box input[type="submit"] {
+    background: #76abae;
+    font-size: 17px;
+    color: #EEEEEE;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-item input[type="submit"] {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: none;
+    border: none;
+    margin: 0;
+    color: var(--headerwhite);
+}
+    .nav-item input[type="submit"]:hover {
+        background: #111;
+    }

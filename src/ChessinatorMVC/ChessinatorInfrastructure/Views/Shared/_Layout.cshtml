@@ -17,11 +17,55 @@
                     <img src="~/images/logobg.png" />
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav upper-controls ms-auto d-flex align-items-center">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("organizer"))
+                            {
+                                var organizerId = User.FindFirst("OrganizerId")?.Value;
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                    asp-controller="Organizers"
+                                    asp-action="Details"
+                                    asp-route-id="@organizerId">
+                                        @User.Identity.Name
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("player"))
+                            {
+                                var playerId = User.FindFirst("PlayerId")?.Value;
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Players"
+                                       asp-action="Details"
+                                       asp-route-id="@playerId">
+                                        @User.Identity.Name
+                                    </a>
+                                </li>
+                            }
+
+
+
+                            <li class="nav-item"> <form method="post" asp-controller="Account" asp-action="Logout"><input type="submit" value="Вихід" /></form></li>
+                                
+
+                            }
+                            else
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вхід</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Реєстація</a>
+                            </li>
+                            }
+                    </ul>
+                    <ul class="navbar-nav flex-grow-1 d-flex justify-content-start ">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Players" asp-action="Index">Гравці</a>
                         </li>

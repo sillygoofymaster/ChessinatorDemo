@@ -14,80 +14,72 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" required/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TournamentTypeId" class="control-label"></label>
-                <select asp-for="TournamentTypeId" class ="form-control" asp-items="ViewBag.TournamentTypeId"></select>
+                <select asp-for="TournamentTypeId" class="form-control" asp-items="ViewBag.TournamentTypeId" required></select>
             </div>
             <div class="form-group">
                 <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
+                <input asp-for="StartTime" class="form-control" id="StartTime" type="datetime-local" required />
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
+                <input asp-for="EndTime" class="form-control" id="EndTime" type="datetime-local" required />
                 <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsOnline" id="isOnlineCheckbox" /> @Html.DisplayNameFor(model => model.IsOnline)
-                </label>
+                    <input type="hidden" asp-for="IsOpen" />
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsOpen" /> @Html.DisplayNameFor(model => model.IsOpen)
+                    <input class="form-check-input" asp-for="IsOnline" id="isOnlineCheckbox" />
+                    @Html.DisplayNameFor(model => model.IsOnline)
                 </label>
+            </div>
+
+            <div class="form-group" id="linkField">
+                <label asp-for="Link" class="control-label"></label>
+                <input asp-for="Link" class="form-control" id="linkInput" />
+                <span asp-validation-for="Link" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PlayerLimit" class="control-label"></label>
-                <input asp-for="PlayerLimit" class="form-control" />
+                <input asp-for="PlayerLimit" class="form-control" required />
                 <span asp-validation-for="PlayerLimit" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RoundCount" class="control-label"></label>
-                <input asp-for="RoundCount" class="form-control" />
+                <input asp-for="RoundCount" class="form-control" required />
                 <span asp-validation-for="RoundCount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Link" class="control-label"></label>
-                <input asp-for="Link" class="form-control" />
-                <span asp-validation-for="Link" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="venueField">
                 <label asp-for="VenueId" class="control-label"></label>
-                <select asp-for="VenueId" class ="form-control" asp-items="ViewBag.VenueId"></select>
+                <select asp-for="VenueId" class ="form-control" asp-items="ViewBag.VenueId" required></select>
             </div>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var isOnlineCheckbox = document.getElementById("isOnlineCheckbox");
-                    var venueField = document.getElementById("venueField");
-
-                    function toggleVenueField() {
-                        if (isOnlineCheckbox.checked) {
-                            venueField.style.display = "none"; // Hide Venue field
-                        } else {
-                            venueField.style.display = "block"; // Show Venue field
-                        }
-                    }
-
-                    // Run on page load
-                    toggleVenueField();
-
-                    // Listen for checkbox changes
-                    isOnlineCheckbox.addEventListener("change", toggleVenueField);
-                });
-            </script>
             <div class="form-group">
                 <label asp-for="TimeControlId" class="control-label"></label>
-                <select asp-for="TimeControlId" class ="form-control" asp-items="ViewBag.TimeControlId"></select>
+                <select asp-for="TimeControlId" class ="form-control" asp-items="ViewBag.TimeControlId" required></select>
             </div>
-            <div class="form-group">
-                <label asp-for="OrganizerId" class="control-label"></label>
-                <select asp-for="OrganizerId" class ="form-control" asp-items="ViewBag.OrganizerId"></select>
-            </div>
+            @if (User?.IsInRole("admin")==true)
+            {
+                <div class="form-group">
+                    <label asp-for="OrganizerId" class="control-label"></label>
+                    <select asp-for="OrganizerId" class="form-control"
+                            asp-items="ViewBag.OrganizerId">
+                        <option value="">Select Organizer</option>
+                    </select>
+                    <span asp-validation-for="OrganizerId" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" asp-for="OrganizerId" value="@ViewBag.OrganizerId" />
+            }
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
@@ -104,6 +96,67 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date().toISOString().slice(0, 16);
+
+        document.getElementById('StartTime').setAttribute('min', today);
+
+        document.getElementById('StartTime').addEventListener('change', function () {
+            var startTime = document.getElementById('StartTime').value;
+            var endTime = document.getElementById('EndTime').value;
+
+            if (endTime && new Date(endTime) <= new Date(startTime)) {
+                alert("Час завершення не може передувати початку.");
+                document.getElementById('EndTime').value = ''; 
+            }
+        });
+
+        document.getElementById('EndTime').addEventListener('change', function () {
+            var startTime = document.getElementById('StartTime').value;
+            var endTime = document.getElementById('EndTime').value;
+
+            if (new Date(endTime) <= new Date(startTime)) {
+                alert("Час завершення не може передувати початку.");
+                document.getElementById('EndTime').value = ''; 
+            }
+        });
+
+        function removeSeconds(inputId) {
+            var inputElement = document.getElementById(inputId);
+            var value = inputElement.value;
+            if (value) {
+                var parts = value.split(':');
+                inputElement.value = parts[0] + ':' + parts[1]; 
+            }
+        }
+
+        document.getElementById('StartTime').addEventListener('change', function() {
+            removeSeconds('StartTime');
+        });
+
+        document.getElementById('EndTime').addEventListener('change', function() {
+            removeSeconds('EndTime');
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var isOnlineCheckbox = document.getElementById("isOnlineCheckbox");
+        var linkField = document.getElementById("linkField");
+        var linkInput = document.getElementById("linkInput");
+
+        function toggleLinkField() {
+            if (isOnlineCheckbox.checked) {
+                linkField.style.display = "block";
+            } else {
+                linkField.style.display = "none";
+                linkInput.value = "";
+            }
+        }
+
+        toggleLinkField();
+
+        isOnlineCheckbox.addEventListener("change", toggleLinkField);
+    });
+</script>

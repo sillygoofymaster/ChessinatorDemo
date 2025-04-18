@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChessinatorDomain.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChessinatorInfrastructure.Controllers
 {
@@ -43,6 +44,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: TournamentTypes/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +55,7 @@ namespace ChessinatorInfrastructure.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([Bind("Id,Name")] TournamentType tournamentType)
         {
             if (ModelState.IsValid)
@@ -65,6 +68,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: TournamentTypes/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +89,7 @@ namespace ChessinatorInfrastructure.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] TournamentType tournamentType)
         {
             if (id != tournamentType.Id)
@@ -116,6 +121,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: TournamentTypes/Delete/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // POST: TournamentTypes/Delete/5
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

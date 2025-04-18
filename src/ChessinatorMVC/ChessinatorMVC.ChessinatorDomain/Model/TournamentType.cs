@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChessinatorDomain.Model;
 
-public partial class TournamentType
+public partial class TournamentType : Entity
 {
-    public int Id { get; set; }
 
     [RequiredWithMessageAttribute]
     [Display(Name = "Назва")]

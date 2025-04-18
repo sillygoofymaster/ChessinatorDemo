@@ -2,7 +2,25 @@
 
 @{
     ViewData["Title"] = "Index";
+    var ParticipationSuccess = TempData["Success"] as string;
+    var Error = TempData["Error"] as string;
 }
+<div id="participationToast" class="toast position-fixed top-0 end-0 m-3 align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            @ParticipationSuccess
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="errorToast" class="toast position-fixed top-0 end-0 m-3 align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            @Error
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
 
 <h1>Index</h1>
 
@@ -16,7 +34,10 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                Дати проведення
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsOnline)
@@ -34,6 +55,9 @@
                 @Html.DisplayNameFor(model => model.Link)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Organizer)
             </th>
             <th>
@@ -45,115 +69,113 @@
             <th>
                 @Html.DisplayNameFor(model => model.Venue)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @(item.StartTime.ToString("dd.MM.yyyy HH:mm") + " - " + item.EndTime.ToString("dd.MM.yyyy HH:mm"))
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsOnline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsOpen)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlayerLimit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoundCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Link)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Organizer.Name)
-            </td>
-            <td>
-                    @(item.TimeControl != null ? $"{item.TimeControl.BaseMinutes} | {item.TimeControl.IncSeconds}" : "N/A")
+        @foreach (var item in Model) {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TournamentType.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Venue.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsOnline)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsOpen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlayerLimit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoundCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Link)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Organizer.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeControl.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TournamentType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue.Adress)
+                </td>
+                <td>
+                    @if (User.IsInRole("player"))
+                    {
+                        var joinedIds = ViewBag.JoinedTournamentIds as List<int> ?? new List<int>();
+                        bool alreadyParticipating = joinedIds.Contains(item.Id);
+                        @if (!alreadyParticipating){
+                            @using (Html.BeginForm("Participate", "Tournaments", FormMethod.Post)){
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("tournamentId", @item.Id)
+                                @Html.Hidden("tournamentName", @item.Name)
+                                <button type="submit" class="btn btn-primary")>
+                                    Приєднатись
+                                </button>
+                            }
+                        }
+                        else
+                        {
+                            @using (Html.BeginForm("Disparticipate", "Tournaments", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("tournamentId", @item.Id)
+                                @Html.Hidden("tournamentName", @item.Name)
+                                <button type="submit" class="btn btn-primary" )>
+                                    Від'єднатсь
+                                </button>
+                            }
+                        }
+
+
+                    }
+
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> | 
+                    <a asp-action="PlayerDetails" asp-route-id="@item.Id">Гравці</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
 
-<div class="row">
-    <div class="col-3">
-        <div id="countByTypeChart"></div>
-    </div>
-</div>
-
-@section Scripts
+@if (!string.IsNullOrEmpty(ParticipationSuccess) || !string.IsNullOrEmpty(Error))
 {
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawCharts);
-
-        function drawCharts() {
-            fetch('/api/charts/countByType')
-                .then(response => response.json())
-                .then(data => {
-                    const dataTable = new google.visualization.DataTable();
-                    dataTable.addColumn('string', 'Тип');
-                    dataTable.addColumn('number', 'Кількість турнірів');
-
-                    data.forEach(item => {
-                        dataTable.addRow([item.type, item.count]);
-                    });
-
-                    const options = {
-                        title: 'Турніри за типами',
-                        width: 600,
-                        height: 400,
-                        backgroundColor: '#31363F',
-                        colors: ['#A5CBC3', '#EEEEEE', '#222831'], 
-
-                        titleTextStyle: {
-                            color: '#EEEEEE',
-                            fontSize: 18,
-                            bold: true
-                        },
-
-                        legend: {
-                            textStyle: { color: '#EEEEEE' }
-                        },
-
-                        pieSliceTextStyle: {
-                            color: '#000000'
-                        },
-
-                        pieHole: 0.4,
-
-                    };
-
-                    const chart = new google.visualization.PieChart(document.getElementById('countByTypeChart'));
-
-                    chart.draw(dataTable, options);
-                });
+        document.addEventListener("DOMContentLoaded", function () {
+        @if (!string.IsNullOrEmpty(ParticipationSuccess))
+        {
+            <text>
+                    var toastEl = document.getElementById('participationToast');
+                    var toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+            </text>
         }
+        else
+        {
+            <text>
+                    var toastEl = document.getElementById('errorToast');
+                    var toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+            </text>
+        }
+        });
     </script>
 }

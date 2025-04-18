@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChessinatorDomain.Model;
 
-public partial class TimeControlType
+public partial class TimeControlType : Entity
 {
-    public int Id { get; set; }
-
     [RequiredWithMessageAttribute]
     [Display(Name = "Назва")]
     [StringLength(30, ErrorMessage = "Назва мусить містити від {1} до {2} символів.", MinimumLength = 3)]

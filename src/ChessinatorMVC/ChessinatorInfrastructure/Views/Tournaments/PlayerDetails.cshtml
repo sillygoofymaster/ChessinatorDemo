@@ -1,0 +1,38 @@
+﻿@model ChessinatorInfrastructure.ViewModel.TournamentPlayerDetailsViewModel
+@{
+    ViewData["Title"] = "Список учасників";
+}
+
+<div>
+    @if (Model.PlayerTournaments.Any())
+    {
+         <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                       Гравець
+                    </th>
+                    <th>
+                        Рахунок
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+            @foreach (var playertournament in Model.PlayerTournaments)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Players" asp-action="Details" asp-route-id="@playertournament.Player.Id">
+                            @Html.DisplayFor(modelItem => playertournament.Player.Username)
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => playertournament.Score)
+                    </td>
+                </tr>
+            }
+            </tbody>
+         </table>
+    }
+</div>

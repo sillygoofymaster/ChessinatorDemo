@@ -12,7 +12,6 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -35,13 +34,18 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsOnline" /> @Html.DisplayNameFor(model => model.IsOnline)
+                    <input class="form-check-input" asp-for="IsOnline" id="isOnlineCheckbox" />
+                    @Html.DisplayNameFor(model => model.IsOnline)
                 </label>
             </div>
+
+            <div class="form-group" id="linkField">
+                <label asp-for="Link" class="control-label"></label>
+                <input asp-for="Link" class="form-control" id="linkInput" />
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
             <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsOpen" /> @Html.DisplayNameFor(model => model.IsOpen)
-                </label>
+                    <input class="form-check-input" type="hidden" asp-for="IsOpen" />
             </div>
             <div class="form-group">
                 <label asp-for="PlayerLimit" class="control-label"></label>
@@ -54,11 +58,6 @@
                 <span asp-validation-for="RoundCount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Link" class="control-label"></label>
-                <input asp-for="Link" class="form-control" />
-                <span asp-validation-for="Link" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="VenueId" class="control-label"></label>
                 <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueId"></select>
                 <span asp-validation-for="VenueId" class="text-danger"></span>
@@ -68,11 +67,27 @@
                 <select asp-for="TimeControlId" class="form-control" asp-items="ViewBag.TimeControlId"></select>
                 <span asp-validation-for="TimeControlId" class="text-danger"></span>
             </div>
+            @if (User?.IsInRole("admin") == true)
+            {
+                <div class="form-group">
+                    <label asp-for="OrganizerId" class="control-label"></label>
+                    <select asp-for="OrganizerId" class="form-control"
+                            asp-items="ViewBag.OrganizerId">
+                        <option value="">Select Organizer</option>
+                    </select>
+                    <span asp-validation-for="OrganizerId" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <input type="hidden" asp-for="OrganizerId" value="@ViewBag.OrganizerId" />
+            }
             <div class="form-group">
-                <label asp-for="OrganizerId" class="control-label"></label>
-                <select asp-for="OrganizerId" class="form-control" asp-items="ViewBag.OrganizerId"></select>
-                <span asp-validation-for="OrganizerId" class="text-danger"></span>
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -84,6 +99,23 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var isOnlineCheckbox = document.getElementById("isOnlineCheckbox");
+        var linkField = document.getElementById("linkField");
+        var linkInput = document.getElementById("linkInput");
+
+        function toggleLinkField() {
+            if (isOnlineCheckbox.checked) {
+                linkField.style.display = "block";
+            } else {
+                linkField.style.display = "none";
+                linkInput.value = "";
+            }
+        }
+
+        toggleLinkField();
+
+        isOnlineCheckbox.addEventListener("change", toggleLinkField);
+    });
+</script>

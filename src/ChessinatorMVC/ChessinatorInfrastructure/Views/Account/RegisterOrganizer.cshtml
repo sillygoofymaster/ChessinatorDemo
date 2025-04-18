@@ -1,0 +1,113 @@
+﻿@model ChessinatorInfrastructure.ViewModel.RegisterOrganizerViewModel
+@{
+     ViewData["Title"] = "Реєстрація";
+}
+<head>
+    <link href="~/lib/bootstrap/dist/css/login.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="main-content">
+        <div id="logcontainer">
+            <form method="post" asp-controller="Account" asp-action="RegisterOrganizer">
+                <div id="errorToast" class="toast align-items-center text-bg-danger border-0"
+                     role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            @Html.ValidationSummary(false, "", new { @class = "mb-0 text-white" })
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <div class="title">Реєстрація</div>
+
+                <div class="form-container">
+                    <div id="step1" class="form-step">
+                        <div class="input-box underline">
+                            <div class="input-box underline">
+                                <input asp-for="Email" placeholder="Пошта" required />
+                                <span asp-validation-for="Email"></span>
+                                <div class="underline"></div>
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <input asp-for="Password" type="password" placeholder="Пароль" required />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-box">
+                            <input asp-for="ConfirmPassword" type="password" placeholder="Підтвердьте пароль" required />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-box button">
+                            <button type="button" onclick="nextStep()">Далі</button>
+                        </div>
+                    </div>
+
+                    <!-- Сторінка 2 -->
+                    <div id="step2" class="form-step" style="display: none;">
+                        <div class="double-input">
+                            <div class="input-box underline">
+                                <input asp-for="FirstName" placeholder="Ім'я" required />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                <div class="underline"></div>
+                            </div>
+                            <div class="input-box">
+                                <input asp-for="LastName" placeholder="Прізвище" required />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                <div class="underline"></div>
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <input asp-for="OrgEmail" placeholder="Контактна пошта" required />
+                            <span asp-validation-for="OrgEmail" class="text-danger"></span>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-box">
+                            <input asp-for="Details" placeholder="Інші контакти" />
+                            <span asp-validation-for="Details" class="text-danger"></span>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-box">
+                            <input asp-for="Organization" placeholder="Організація" />
+                            <span asp-validation-for="Organization" class="text-danger"></span>
+                            <div class="underline"></div>
+                        </div>
+                        <div class="input-box button">
+                            <button type="button" onclick="backStep()">Назад</button>
+                            <input type="submit" value="Зареєструватися" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script>
+    function nextStep() {
+        document.getElementById("step1").style.display = "none";
+        document.getElementById("step2").style.display = "block";
+    }
+</script>
+<script>
+    function backStep() {
+        document.getElementById("step2").style.display = "none";
+        document.getElementById("step1").style.display = "block";
+    }
+</script>
+@if (!ViewData.ModelState.IsValid)
+{
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            var toastEl = document.getElementById('errorToast');
+            if (toastEl) {
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+        });
+    </script>
+}

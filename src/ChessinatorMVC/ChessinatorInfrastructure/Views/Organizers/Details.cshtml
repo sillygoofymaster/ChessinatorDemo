@@ -1,0 +1,159 @@
+﻿@model ChessinatorInfrastructure.ViewModel.OrgDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<dt class="col-sm-2">
+    <img src="@(!string.IsNullOrEmpty(Model.Organizer.ProfilePicturePath)
+    ? Model.Organizer.ProfilePicturePath
+    : "/images/defaultavatar.png")"
+         alt="Profile Picture" />
+</dt>
+
+<div>
+    <h4>Organizer</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.FirstName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.FirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.LastName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.LastName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.Detais)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.Detais)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.Organization)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.Organization)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer.UserId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Organizer.UserId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Organizer?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+<div>
+    @if (Model.Tournaments.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                       Назва
+                    </th>
+                    <th>
+                        Дати проведення
+                    </th>
+                    <th>
+                        Онлайн
+                    </th>
+                    <th>
+                        ?
+                    </th>
+                    <th>
+                        Ліміт гравців
+                    </th>
+                    <th>
+                        Кількість раундів
+                    </th>
+                    <th>
+                       Посилання
+                    </th>
+                    <th>
+                        Організатор
+                    </th>
+                    <th>
+                        Часовий контроль
+                    </th>
+                    <th>
+                        Тип
+                    </th>
+                    <th>
+                        Локація
+                    </th>
+                    <th>
+                        Опис
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tournament in Model.Tournaments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem =>  tournament.Name)
+                        </td>
+                        <td>
+                            @(tournament.StartTime.ToString("dd.MM.yyyy HH:mm") + " - " + tournament.EndTime.ToString("dd.MM.yyyy HH:mm"))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.IsOnline)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.IsOpen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.PlayerLimit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.RoundCount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.Link)
+                        </td>
+                        <td>
+                            @($"{tournament.Organizer?.FirstName ?? "This user was deleted"} {tournament.Organizer?.LastName ?? ""}".Trim())
+
+                        </td>
+                        <td>
+                            @(tournament.TimeControl != null ? $"{tournament.TimeControl.BaseMinutes} | {tournament.TimeControl.IncSeconds}" : "N/A")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.TournamentType.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.Venue.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => tournament.Description)
+                        </td>
+                        <td>
+                            <a asp-controller="Tournaments" asp-action="Edit" asp-route-id="@tournament.Id">Edit</a> |
+                            <a asp-controller="Tournaments" asp-action="Details" asp-route-id="@tournament.Id">Details</a> |
+                            <a asp-controller="Tournaments" asp-action="Delete" asp-route-id="@tournament.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

@@ -17,7 +17,7 @@ namespace ChessinatorInfrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -30,11 +30,14 @@ namespace ChessinatorInfrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BlackPlayerId")
+                    b.Property<int?>("BlackElo")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int?>("BlackPlayerElo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BlackPlayerId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MatchResultId")
                         .HasColumnType("int");
@@ -43,25 +46,28 @@ namespace ChessinatorInfrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoundNumber")
+                    b.Property<string>("Opening")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RoundId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("TournamentId")
+                    b.Property<int?>("WhiteElo")
                         .HasColumnType("int");
 
-                    b.Property<int>("WhitePlayerId")
+                    b.Property<int?>("WhitePlayerElo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WhitePlayerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchResultId");
-
                     b.HasIndex(new[] { "BlackPlayerId" }, "IX_ChessMatch_BlackPlayerId");
 
-                    b.HasIndex(new[] { "TournamentId" }, "IX_ChessMatch_TournamentId");
+                    b.HasIndex(new[] { "MatchResultId" }, "IX_ChessMatch_MatchResultId");
+
+                    b.HasIndex(new[] { "RoundId" }, "IX_ChessMatch_RoundId");
 
                     b.HasIndex(new[] { "WhitePlayerId" }, "IX_ChessMatch_WhitePlayerId");
 
@@ -89,6 +95,31 @@ namespace ChessinatorInfrastructure.Migrations
                     b.ToTable("MatchResults");
                 });
 
+            modelBuilder.Entity("ChessinatorDomain.Model.Opening", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Moves")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Openings");
+                });
+
             modelBuilder.Entity("ChessinatorDomain.Model.Organizer", b =>
                 {
                     b.Property<int>("Id")
@@ -97,11 +128,28 @@ namespace ChessinatorInfrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Detais")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Organization")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -122,50 +170,47 @@ namespace ChessinatorInfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CurrentElo")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(400);
 
-                    b.Property<string>("DisplayName")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)")
-                        .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
-
-                    b.Property<int>("Draws")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
+                    b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Loses")
-                        .HasColumnType("int");
-
                     b.Property<int>("PeakElo")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(400);
+
+                    b.Property<string>("ProfilePicturePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TitleId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TotalGamesCount")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasComputedColumnSql("[Wins] + [Loses] + [Draws]");
+                        .HasDefaultValue(0);
 
-                    b.Property<double?>("Winrate")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("float")
-                        .HasComputedColumnSql("CASE WHEN ([Wins] + [Loses] + [Draws]) = 0 THEN 0 ELSE CAST([Wins] AS FLOAT) / CAST([Wins] + [Loses] + [Draws] AS FLOAT) END");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Wins")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.HasIndex(new[] { "TitleId" }, "IX_Player_TitleId");
 
@@ -180,7 +225,7 @@ namespace ChessinatorInfrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PlayerId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<int>("Score")
@@ -196,6 +241,33 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasIndex(new[] { "TournamentId" }, "IX_PlayerTournament_TournamentId");
 
                     b.ToTable("PlayerTournament", (string)null);
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.Round", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TournamentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TournamentId");
+
+                    b.ToTable("Rounds");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.TimeControl", b =>
@@ -217,7 +289,7 @@ namespace ChessinatorInfrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex(new[] { "TypeId" }, "IX_TimeControl_TypeId");
 
                     b.ToTable("TimeControl", (string)null);
                 });
@@ -280,7 +352,9 @@ namespace ChessinatorInfrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsOpen")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
@@ -290,7 +364,7 @@ namespace ChessinatorInfrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("OrganizerId")
+                    b.Property<int?>("OrganizerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerLimit")
@@ -305,19 +379,25 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Property<int>("TimeControlId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TournamentPicturePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TournamentTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VenueId")
+                    b.Property<int?>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TournamentTypeId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex(new[] { "OrganizerId" }, "IX_Tournament_OrganizerId");
 
                     b.HasIndex(new[] { "TimeControlId" }, "IX_Tournament_TimeControlId");
+
+                    b.HasIndex(new[] { "TournamentTypeId" }, "IX_Tournament_TournamentTypeId");
 
                     b.HasIndex(new[] { "VenueId" }, "IX_Tournament_VenueId");
 
@@ -340,6 +420,85 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TournamentTypes");
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("OrganizerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("OrganizerId")
+                        .IsUnique()
+                        .HasFilter("[OrganizerId] IS NOT NULL");
+
+                    b.HasIndex("PlayerId")
+                        .IsUnique()
+                        .HasFilter("[PlayerId] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Venue", b =>
@@ -372,12 +531,144 @@ namespace ChessinatorInfrastructure.Migrations
                     b.ToTable("Venue", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
             modelBuilder.Entity("ChessinatorDomain.Model.ChessMatch", b =>
                 {
                     b.HasOne("ChessinatorDomain.Model.Player", "BlackPlayer")
                         .WithMany("ChessMatchBlackPlayers")
-                        .HasForeignKey("BlackPlayerId")
-                        .IsRequired();
+                        .HasForeignKey("BlackPlayerId");
 
                     b.HasOne("ChessinatorDomain.Model.MatchResult", "MatchResult")
                         .WithMany("Matches")
@@ -385,21 +676,20 @@ namespace ChessinatorInfrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ChessinatorDomain.Model.Tournament", "Tournament")
+                    b.HasOne("ChessinatorDomain.Model.Round", "Round")
                         .WithMany("ChessMatches")
-                        .HasForeignKey("TournamentId")
+                        .HasForeignKey("RoundId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ChessinatorDomain.Model.Player", "WhitePlayer")
                         .WithMany("ChessMatchWhitePlayers")
-                        .HasForeignKey("WhitePlayerId")
-                        .IsRequired();
+                        .HasForeignKey("WhitePlayerId");
 
                     b.Navigation("BlackPlayer");
 
                     b.Navigation("MatchResult");
 
-                    b.Navigation("Tournament");
+                    b.Navigation("Round");
 
                     b.Navigation("WhitePlayer");
                 });
@@ -420,16 +710,26 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasOne("ChessinatorDomain.Model.Player", "Player")
                         .WithMany("PlayerTournaments")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ChessinatorDomain.Model.Tournament", "Tournament")
                         .WithMany("PlayerTournaments")
                         .HasForeignKey("TournamentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Player");
+
+                    b.Navigation("Tournament");
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.Round", b =>
+                {
+                    b.HasOne("ChessinatorDomain.Model.Tournament", "Tournament")
+                        .WithMany("Rounds")
+                        .HasForeignKey("TournamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Tournament");
                 });
@@ -450,8 +750,7 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasOne("ChessinatorDomain.Model.Organizer", "Organizer")
                         .WithMany("Tournaments")
                         .HasForeignKey("OrganizerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ChessinatorDomain.Model.TimeControl", "TimeControl")
                         .WithMany("Tournaments")
@@ -468,8 +767,7 @@ namespace ChessinatorInfrastructure.Migrations
                     b.HasOne("ChessinatorDomain.Model.Venue", "Venue")
                         .WithMany("Tournaments")
                         .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Organizer");
 
@@ -480,6 +778,74 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Navigation("Venue");
                 });
 
+            modelBuilder.Entity("ChessinatorDomain.Model.User", b =>
+                {
+                    b.HasOne("ChessinatorDomain.Model.Organizer", "OrganizerProfile")
+                        .WithOne("User")
+                        .HasForeignKey("ChessinatorDomain.Model.User", "OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ChessinatorDomain.Model.Player", "PlayerProfile")
+                        .WithOne("User")
+                        .HasForeignKey("ChessinatorDomain.Model.User", "PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("OrganizerProfile");
+
+                    b.Navigation("PlayerProfile");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("ChessinatorDomain.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("ChessinatorDomain.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChessinatorDomain.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("ChessinatorDomain.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ChessinatorDomain.Model.MatchResult", b =>
                 {
                     b.Navigation("Matches");
@@ -488,6 +854,8 @@ namespace ChessinatorInfrastructure.Migrations
             modelBuilder.Entity("ChessinatorDomain.Model.Organizer", b =>
                 {
                     b.Navigation("Tournaments");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.Player", b =>
@@ -497,6 +865,13 @@ namespace ChessinatorInfrastructure.Migrations
                     b.Navigation("ChessMatchWhitePlayers");
 
                     b.Navigation("PlayerTournaments");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChessinatorDomain.Model.Round", b =>
+                {
+                    b.Navigation("ChessMatches");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.TimeControl", b =>
@@ -516,9 +891,9 @@ namespace ChessinatorInfrastructure.Migrations
 
             modelBuilder.Entity("ChessinatorDomain.Model.Tournament", b =>
                 {
-                    b.Navigation("ChessMatches");
-
                     b.Navigation("PlayerTournaments");
+
+                    b.Navigation("Rounds");
                 });
 
             modelBuilder.Entity("ChessinatorDomain.Model.TournamentType", b =>

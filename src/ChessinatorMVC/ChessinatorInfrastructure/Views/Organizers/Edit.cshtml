@@ -1,0 +1,67 @@
+﻿@model ChessinatorInfrastructure.ViewModel.OrgDetailsViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Organizer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input type="file" name="ProfilePicture" /> <br />
+            <input type="hidden" asp-for="Organizer.ProfilePicturePath" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Organizer.FirstName" class="control-label"></label>
+                <input asp-for="Organizer.FirstName" class="form-control" />
+                <span asp-validation-for="Organizer.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Organizer.LastName" class="control-label"></label>
+                <input asp-for="Organizer.LastName" class="form-control" />
+                <span asp-validation-for="Organizer.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Organizer.Email" class="control-label"></label>
+                <input asp-for="Organizer.Email" class="form-control" />
+                <span asp-validation-for="Organizer.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Organizer.Detais" class="control-label"></label>
+                <input asp-for="Organizer.Detais" class="form-control" />
+                <span asp-validation-for="Organizer.Detais" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Organizer.Organization" class="control-label"></label>
+                <input asp-for="Organizer.Organization" class="form-control" />
+                <span asp-validation-for="Organizer.Organization" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Organizer.UserId" class="control-label"></label>
+                <input asp-for="Organizer.UserId" class="form-control" />
+                <span asp-validation-for="Organizer.UserId" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="Organizer.Id" />
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

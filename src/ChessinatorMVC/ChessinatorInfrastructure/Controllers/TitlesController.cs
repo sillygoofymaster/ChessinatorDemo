@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChessinatorDomain.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChessinatorInfrastructure.Controllers
 {
@@ -43,6 +44,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: Titles/Create
+        [Authorize(Roles = "admin")]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +53,7 @@ namespace ChessinatorInfrastructure.Controllers
         // POST: Titles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ShortName,LongName")] Title title)
@@ -65,6 +68,7 @@ namespace ChessinatorInfrastructure.Controllers
         }
 
         // GET: Titles/Edit/5
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,6 +87,7 @@ namespace ChessinatorInfrastructure.Controllers
         // POST: Titles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ShortName,LongName")] Title title)
@@ -115,6 +120,7 @@ namespace ChessinatorInfrastructure.Controllers
             return View(title);
         }
 
+        [Authorize(Roles = "admin")]
         // GET: Titles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -133,6 +139,7 @@ namespace ChessinatorInfrastructure.Controllers
             return View(title);
         }
 
+        [Authorize(Roles = "admin")]
         // POST: Titles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
